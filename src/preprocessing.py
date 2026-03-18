@@ -126,11 +126,13 @@ def agregger_credit_card(data_raw: str) -> pd.DataFrame:
     """Agrège credit_card_balance.csv par SK_ID_CURR."""
     cc = pd.read_csv(data_raw + 'credit_card_balance.csv')
     cc['utilisation'] = cc['AMT_BALANCE'] / cc['AMT_CREDIT_LIMIT_ACTUAL'].replace(0, np.nan)
-    return cc.groupby('SK_ID_CURR').agg(
+    agg = cc.groupby('SK_ID_CURR').agg(
         cc_utilisation_mean = ('utilisation', 'mean'),
         cc_dpd_mean         = ('SK_DPD', 'mean'),
         cc_balance_mean     = ('AMT_BALANCE', 'mean'),
     ).reset_index()
+    agg['a_carte_credit'] = 1  # flag : client présent dans credit_card_balance
+    return agg
 
 
 def build_preprocessor(num_cols: list[str], cat_cols: list[str]):
