@@ -133,6 +133,41 @@ def agregger_credit_card(data_raw: str) -> pd.DataFrame:
     ).reset_index()
 
 
+def build_preprocessor(num_cols: list[str], cat_cols: list[str]):
+    """
+    Construit le ColumnTransformer standard du projet.
+
+    - Numériques   : imputation médiane + StandardScaler
+    - Catégorielles : imputation mode + OneHotEncoder
+
+    Parameters
+    ----------
+    num_cols : list[str]
+        Colonnes numériques à transformer.
+    cat_cols : list[str]
+        Colonnes catégorielles à transformer.
+
+    Returns
+    -------
+    sklearn.compose.ColumnTransformer
+    """
+    from sklearn.compose import ColumnTransformer
+    from sklearn.impute import SimpleImputer
+    from sklearn.preprocessing import StandardScaler, OneHotEncoder
+    from sklearn.pipeline import Pipeline
+
+    return ColumnTransformer([
+        ('num', Pipeline([
+            ('imputer', SimpleImputer(strategy='median')),
+            ('scaler', StandardScaler()),
+        ]), num_cols),
+        ('cat', Pipeline([
+            ('imputer', SimpleImputer(strategy='most_frequent')),
+            ('ohe', OneHotEncoder(handle_unknown='ignore', sparse_output=False)),
+        ]), cat_cols),
+    ], remainder='drop')
+
+
 def fusionner(base: pd.DataFrame, tables: list[pd.DataFrame]) -> pd.DataFrame:
     """Fusionne une liste de tables sur SK_ID_CURR par left join."""
     df = base.copy()
