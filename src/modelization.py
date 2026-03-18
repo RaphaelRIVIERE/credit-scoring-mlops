@@ -18,11 +18,11 @@ def cout_metier(y_true, y_proba, seuil=0.5, cout_fn=10, cout_fp=1):
 
 
 def trouver_seuil_optimal(y_true, y_proba):
-    """Balaye les seuils de 0.05 à 0.95 et retourne celui qui minimise le coût métier."""
-    seuils = np.arange(0.05, 0.95, 0.01)
+    """Retourne le seuil minimisant le coût métier parmi les probabilités prédites."""
+    seuils = np.unique(y_proba)
     couts = [cout_metier(y_true, y_proba, s) for s in seuils]
     idx_opt = np.argmin(couts)
-    return round(float(seuils[idx_opt]), 2), int(couts[idx_opt])
+    return round(float(seuils[idx_opt]), 4), int(couts[idx_opt])
 
 
 def cross_validate_model(pipeline, X_train, y_train, cv, scoring):

@@ -722,6 +722,44 @@ def plot_model_versions(
         )
 
 
+def create_lineplot(
+    ax: Axes,
+    x, y,
+    color: str = 'steelblue',
+    linestyle: str = '-',
+    marker: str | None = None,
+    alpha: float = 0.8,
+    label: str | None = None,
+    hline: float | None = None,
+    hline_label: str | None = None,
+    hline_color: str = 'red',
+    vline: float | None = None,
+    vline_label: str | None = None,
+    vline_color: str = 'red',
+    title: str | None = None,
+    xlabel: str | None = None,
+    ylabel: str | None = None,
+    subtitle: str | None = None,
+    grid: bool = False,
+    show_legend: bool = True,
+    legend_title: str | None = None,
+    xrotation: int = 0,
+):
+    """Trace un graphique linéaire avec lignes de référence optionnelles (hline/vline)."""
+    ax.plot(x, y, color=color, linestyle=linestyle, marker=marker, alpha=alpha, label=label)
+
+    if hline is not None:
+        ax.axhline(hline, color=hline_color, linestyle='--', label=hline_label)
+    if vline is not None:
+        ax.axvline(vline, color=vline_color, linestyle='--', label=vline_label)
+
+    _apply_formatting(
+        ax, title=title, xlabel=xlabel, ylabel=ylabel, subtitle=subtitle,
+        xrotation=xrotation, grid=grid, legend_title=legend_title,
+        show_legend=show_legend,
+    )
+
+
 def plot_distributions(
     series: dict[str, pd.DataFrame],
     col: str, ax: Axes,
