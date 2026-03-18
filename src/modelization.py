@@ -151,7 +151,7 @@ def evaluate_model(name, pipeline, params, X_train, y_train, X_val, cv, scoring,
     mlflow.log_metric('fit_time_final',   fit_time_final)
     mlflow.log_metric('predict_time_val', predict_time_val)
 
-    mlflow_log_model(pipeline, name="model")
+    mlflow_log_model(pipeline, name="model", pyfunc_predict_fn="predict_proba")
 
     return {
         'pipeline':    pipeline,
