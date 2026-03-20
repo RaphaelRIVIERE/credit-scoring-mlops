@@ -3,7 +3,7 @@ Test du serving MLflow — modèle LightGBM optimisé (Optuna), version 3.
 
 Lancement préalable dans un terminal séparé :
     uv run mlflow models serve \
-        -m "models:/credit-scoring-model/3" \
+        -m "models:/credit-scoring-model@production" \
         --port 5001 \
         --no-conda
 
@@ -16,10 +16,11 @@ import requests
 import pandas as pd
 
 SEUIL_OPT = 0.4926
+NB_CLIENT = 3
 
 # Charger quelques lignes du dataset de test
 df_test = pd.read_csv("data/processed/test_processed.csv")
-sample = df_test.drop(columns=["SK_ID_CURR"]).head(3)
+sample = df_test.drop(columns=["SK_ID_CURR"]).head(NB_CLIENT)
 
 # Format attendu par MLflow serving
 payload = {
